@@ -1,7 +1,9 @@
 var grabTool = {
+  name:      "grab",
   mouseDown: grabMouseDown,
   mouseMove: grabMouseMove,
-  mouseUp:   grabMouseUp
+  mouseUp:   grabMouseUp,
+  select:    function(){}
 };
 
 var Grab = {
@@ -16,6 +18,7 @@ var Grab = {
 }
 
 function grabMouseDown(ev){
+  if(ev.button != 0) return;
   if(ev.target.classList.contains("token")){
     console.log("grab token");
     Grab.state = "token";
@@ -63,6 +66,7 @@ function grabMouseMove(ev){
 }
 
 function grabMouseUp(ev){
+  if(ev.button != 0) return;
   if(Grab.state == null) return;
   Grab.state = null;
   Grab.token = null;

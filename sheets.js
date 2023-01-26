@@ -35,8 +35,13 @@ function newSheet(config){
   canvas.style.top = config.top + "px";
   canvas.classList.add(config.class);
   canvas.classList.add("world");
+  canvas.classList.add("surface");
 
   if(config.color){
+    canvas.setAttribute("data-color", config.color);
+  }
+
+  if(!config.clear && config.color){
     var ctx = canvas.getContext("2d");
     ctx.fillStyle = config.color;
     ctx.fillRect(0,0,canvas.width, canvas.height);

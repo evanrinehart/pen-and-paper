@@ -1,12 +1,24 @@
 var Paint = {
   state: null,
-  path:  []
+  path:  [],
+  color: "black",
+  size: 3
 };
 
-var paintTool = {
+var pencilTool = {
+  name:      "pencil",
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
-  mouseUp:   paintMouseUp
+  mouseUp:   paintMouseUp,
+  select:    paintSelected
+};
+
+var eraserTool = {
+  name:      "eraser",
+  mouseDown: paintMouseDown,
+  mouseMove: paintMouseMove,
+  mouseUp:   paintMouseUp,
+  select:    eraserSelected
 };
 
 function eachCanvas(f){
@@ -48,8 +60,13 @@ function repaintPathOn(canvas,ctx){
   var brushPath = Paint.path;
 
   if(brushPath.length == 0) return;
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
+  if(Paint.color){
+    ctx.strokeStyle = Paint.color;
+  }
+  else{
+    ctx.strokeStyle = canvas.getAttribute("data-color");
+  }
+  ctx.lineWidth = Paint.size;
   ctx.lineCap = "round";
 
   var start = standardPositionToCanvas(canvas, brushPath[0]);
@@ -78,7 +95,8 @@ function clearAllScratch(){
 
 /* MAIN CALLBACKS */
 function paintMouseDown(ev){
-  console.log("begin brush", Paint.path.length);
+  if(ev.button != 0) return;
+  if(!ev.target.classList.contains("surface")) return;
   Paint.state = 1;
   Paint.path.length = 0;
   Paint.path.push(eventPositionToStandard(ev));
@@ -87,19 +105,26 @@ function paintMouseDown(ev){
 
 function paintMouseMove(ev){
   if(Paint.state == null) return;
-  console.log("move brush", Paint.path.length);
   Paint.path.push(eventPositionToStandard(ev));
   clearAllScratch();
   repaintPathOnAll("scratch");
 }
 
 function paintMouseUp(ev){
+  if(ev.button != 0) return;
   if(Paint.state == null) return;
-  console.log("end brush", Paint.path.length);
   repaintPathOnAll("paper");
   clearAllScratch();
   Paint.path.length = 0;
   Paint.state = null;
 }
 
+function paintSelected(){
+  Paint.color = "black";
+  Paint.size = 3;
+}
 
+function eraserSelected(){
+  Paint.color = null;
+  Paint.size = 30;
+}

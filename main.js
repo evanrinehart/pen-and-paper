@@ -47,16 +47,35 @@ function onMouseUp(ev){
   currentTool.mouseUp(ev);
 }
 
+function onToolClick(ev){
+  if(ev.target.matches("#toolbar .tool")){
+    var name = ev.target.getAttribute("data-tool");
+    if(currentTool.name != name){
+      var buttons = document.querySelectorAll("#toolbar .tool");
+      for(let i=0; i<buttons.length; i++){
+        buttons[i].classList.remove("active");
+      }
+      ev.target.classList.add("active");
+      switch(name){
+        case "grab":  currentTool = grabTool;  break;
+        case "pencil": currentTool = pencilTool; break;
+        case "eraser": currentTool = eraserTool; break;
+      }
+      currentTool.select();
+    }
+  }
+}
 
 
 function onLoad(ev){
 
-  currentTool = paintTool;
+  currentTool = grabTool;
 
   document.addEventListener("mousedown", onMouseDown);
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("mouseup",   onMouseUp);
 
+  document.addEventListener("click", onToolClick);
 
   var size = 1024;
 //  newSheet(document.getElementById("workspace"), size, size);
@@ -64,48 +83,48 @@ function onLoad(ev){
     newID: true,
     width: size,
     height: size,
-    left: 1024,
+    left: 0,
     top: 0,
     zIndex: 0,
     color: "beige",
     class: "paper"
   });
-
   document.getElementById("workspace").appendChild(canvas);
 
   var canvas = newSheet({
     width: size,
     height: size,
-    left: 1024,
+    left: 0,
     top: 0,
     zIndex: 50,
+    color: "beige",
+    clear: true,
     class: "scratch"
   });
-
   document.getElementById("workspace").appendChild(canvas);
 
   var canvas = newSheet({
     newID: true,
     width: size,
     height: size,
-    left: 0,
+    left: 1024,
     top: 0,
     zIndex: 0,
-    color: "beige",
+    color: "darkseagreen",
     class: "paper"
   });
-
   document.getElementById("workspace").appendChild(canvas);
 
   var canvas = newSheet({
     width: size,
     height: size,
-    left: 0,
+    left: 1024,
     top: 0,
     zIndex: 50,
+    color: "darkseagreen",
+    clear: true,
     class: "scratch"
   });
-
   document.getElementById("workspace").appendChild(canvas);
 
   /*
@@ -138,8 +157,7 @@ function onLoad(ev){
     //console.log(ev.target.files[0]);
   });
 */
-  
-  
+
 }
 
 window.addEventListener("load", onLoad);

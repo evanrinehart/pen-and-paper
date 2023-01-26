@@ -13,9 +13,6 @@
 <body>
 <h1>App</h1>
 
-<input id="fileinput" type="file">
-<img id="myimage" src="">
-
 <div id="workspace">
   <img class="token" draggable="false" src="img/swordman.svg">
   <img class="token" draggable="false" src="img/bleeding-eye.svg">
@@ -23,7 +20,11 @@
   <img class="token" draggable="false" src="img/chess-rook.svg">
 </div>
 
-<img id="empty-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+<div id="toolbar">
+  <img class="tool active" data-tool="grab"   src="img/hand.svg">
+  <img class="tool"        data-tool="pencil" src="img/pencil.svg">
+  <img class="tool"        data-tool="eraser" src="img/reverse-pencil.svg">
+</div>
 
 </body>
 

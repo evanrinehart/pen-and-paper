@@ -25,3 +25,23 @@ body {
 canvas {
   position: absolute;
 }
+
+#toolbar {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  height: 100px;
+  z-index: 200;
+  padding: 10px 10px 20px 10px;
+}
+
+#toolbar img {
+  width: 100px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+#toolbar img.active {
+  filter: sepia(1) hue-rotate(45deg) saturate(30) brightness(0.75);
+}
+
