@@ -6,15 +6,6 @@
    more complex documents, like a map.
 */
 
-function eachCanvas(f){
-  var stuff = document.getElementsByTagName("canvas");
-  for(let i = 0; i < stuff.length; i++){
-    var canvas = stuff[i];
-    var ctx = canvas.getContext("2d");
-    f(canvas, ctx);
-  }
-}
-
 function markPoint(canvas,ctx,x,y){
   ctx.strokeStyle = "black";
   ctx.lineWidth = 3;
@@ -63,6 +54,7 @@ function standardPositionToCanvas(canvas, xy){
   return {x: x, y: y};
 }
 
+/*
 function repaintPathOn(canvas,ctx){
   if(brushPath.length == 0) return;
   ctx.strokeStyle = "black";
@@ -92,6 +84,7 @@ function clearAllScratch(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
   });
 }
+*/
 
 function brushMouseDown(ev){
   if(brushEnable == false) return;
@@ -144,11 +137,15 @@ class:
 
 function newSheet(config){
   const canvas = document.createElement("canvas");
-  const id = generateId();
-  canvas.setAttribute("data-id", id);
+  
+  if(config.newID){
+    const id = generateId();
+    canvas.setAttribute("data-id", id);
+    canvas.id = "canvas-" + id;
+  }
+
   canvas.setAttribute("width", config.width);
   canvas.setAttribute("height", config.height);
-  canvas.id = "canvas-" + id;
   canvas.style.position = "absolute";
   canvas.style.zIndex = config.zIndex;
   canvas.style.left = config.left + "px";

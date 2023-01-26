@@ -51,7 +51,7 @@ function onMouseUp(ev){
 
 function onLoad(ev){
 
-  currentTool = grabTool;
+  currentTool = paintTool;
 
   document.addEventListener("mousedown", onMouseDown);
   document.addEventListener("mousemove", onMouseMove);
@@ -61,6 +61,7 @@ function onLoad(ev){
   var size = 1024;
 //  newSheet(document.getElementById("workspace"), size, size);
   var canvas = newSheet({
+    newID: true,
     width: size,
     height: size,
     left: 1024,
@@ -84,6 +85,7 @@ function onLoad(ev){
   document.getElementById("workspace").appendChild(canvas);
 
   var canvas = newSheet({
+    newID: true,
     width: size,
     height: size,
     left: 0,

@@ -9,6 +9,16 @@ var paintTool = {
   mouseUp:   paintMouseUp
 };
 
+function eachCanvas(f){
+  var stuff = document.getElementsByTagName("canvas");
+  for(let i = 0; i < stuff.length; i++){
+    var canvas = stuff[i];
+    var ctx = canvas.getContext("2d");
+    f(canvas, ctx);
+  }
+}
+
+/* CONVERSIONS */
 function eventPositionToStandard(ev){
   var ws = document.getElementById("workspace");
   var rect = ws.getBoundingClientRect();
@@ -33,8 +43,9 @@ function standardPositionToCanvas(canvas, xy){
   return {x: x, y: y};
 }
 
+/* PAINTING COMMANDS */
 function repaintPathOn(canvas,ctx){
-  var brushPath = Path.path;
+  var brushPath = Paint.path;
 
   if(brushPath.length == 0) return;
   ctx.strokeStyle = "black";
@@ -65,8 +76,9 @@ function clearAllScratch(){
   });
 }
 
+/* MAIN CALLBACKS */
 function paintMouseDown(ev){
-  console.log("begin brush");
+  console.log("begin brush", Paint.path.length);
   Paint.state = 1;
   Paint.path.length = 0;
   Paint.path.push(eventPositionToStandard(ev));
@@ -75,6 +87,7 @@ function paintMouseDown(ev){
 
 function paintMouseMove(ev){
   if(Paint.state == null) return;
+  console.log("move brush", Paint.path.length);
   Paint.path.push(eventPositionToStandard(ev));
   clearAllScratch();
   repaintPathOnAll("scratch");
@@ -82,11 +95,10 @@ function paintMouseMove(ev){
 
 function paintMouseUp(ev){
   if(Paint.state == null) return;
-
+  console.log("end brush", Paint.path.length);
   repaintPathOnAll("paper");
-
   clearAllScratch();
-
+  Paint.path.length = 0;
   Paint.state = null;
 }
 
