@@ -66,6 +66,16 @@ function onToolClick(ev){
   }
 }
 
+function onHeadingClick(ev){
+  if(ev.button == 0 && ev.target.id == "header"){
+    var newText = prompt("Change the heading text?", ev.target.innerHTML);
+    if(newText){
+      ev.target.innerHTML = newText;
+    }
+  }
+}
+
+
 
 function onLoad(ev){
 
@@ -76,6 +86,7 @@ function onLoad(ev){
   document.addEventListener("mouseup",   onMouseUp);
 
   document.addEventListener("click", onToolClick);
+  document.addEventListener("click", onHeadingClick);
 
   var size = 1024;
 //  newSheet(document.getElementById("workspace"), size, size);
