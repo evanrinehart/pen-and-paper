@@ -21,6 +21,17 @@ function onMouseUp(ev){
   currentTool.mouseUp(ev);
 }
 
+function onDoubleClick(ev){
+  if(ev.target.classList.contains("token")){
+    if(ev.target.classList.contains("reverse")){
+      ev.target.classList.remove("reverse");
+    }
+    else{
+      ev.target.classList.add("reverse");
+    }
+  }
+}
+
 function toolButtonChangeTo(button){
   var buttons = document.querySelectorAll("#toolbar .tool");
   for(let i=0; i<buttons.length; i++){
@@ -38,6 +49,7 @@ function onToolClick(ev){
         case "grab":   currentTool = grabTool;  break;
         case "pencil": currentTool = pencilTool; break;
         case "inkpen": currentTool = inkpenTool; break;
+        case "paint":  currentTool = paintTool; break;
         case "eraser": currentTool = eraserTool; break;
       }
       currentTool.select();
@@ -66,6 +78,7 @@ function onLoad(ev){
 
   document.addEventListener("click", onToolClick);
   document.addEventListener("click", onHeadingClick);
+  document.addEventListener("dblclick", onDoubleClick);
 
   var size = 1024;
 //  newSheet(document.getElementById("workspace"), size, size);

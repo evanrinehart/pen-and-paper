@@ -11,7 +11,7 @@ var pencilTool = {
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
-  select:    paintSelected
+  select:    pencilSelected
 };
 
 var eraserTool = {
@@ -28,6 +28,14 @@ var inkpenTool = {
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
   select:    inkpenSelected
+};
+
+var paintTool = {
+  name:      "paint",
+  mouseDown: paintMouseDown,
+  mouseMove: paintMouseMove,
+  mouseUp:   paintMouseUp,
+  select:    paintSelected
 };
 
 function eachCanvas(f){
@@ -147,8 +155,8 @@ function paintMouseUp(ev){
   Paint.state = null;
 }
 
-function paintSelected(){
-  Paint.color = "gray";
+function pencilSelected(){
+  Paint.color = "#585858";
   Paint.size = 1;
   Paint.erase = false;
 }
@@ -162,5 +170,11 @@ function eraserSelected(){
 function inkpenSelected(){
   Paint.color = "black";
   Paint.size = 2;
+  Paint.erase = false;
+}
+
+function paintSelected(){
+  Paint.color = "green";
+  Paint.size = 20;
   Paint.erase = false;
 }

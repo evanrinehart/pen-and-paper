@@ -39,6 +39,20 @@ body {
   user-select: none;
 }
 
+.token.reverse {
+  transform: scaleX(-1);
+}
+
+.pin {
+  width: 32px;
+  z-index: 100;
+  position: absolute;
+  left: 200px;
+  top: 300px;
+  cursor: pointer;
+  user-select: none;
+}
+
 canvas {
   position: absolute;
 }
@@ -52,7 +66,7 @@ canvas {
   line-height: 0px;
 }
 
-#toolbar img {
+#toolbar .button {
   width: 50px;
   padding-right: 10px;
   padding-left: 10px;
@@ -63,3 +77,11 @@ canvas {
   filter: sepia(1) hue-rotate(45deg) saturate(30) brightness(0.75);
 }
 
+
+#souls {
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  padding: 20px;
+  margin: 0px;
+}
