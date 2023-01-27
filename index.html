@@ -6,6 +6,7 @@
   <script type="text/javascript" src="grab.js"></script>
   <script type="text/javascript" src="paint.js"></script>
   <script type="text/javascript" src="sheets.js"></script>
+  <script type="text/javascript" src="grid.js"></script>
   <script type="text/javascript" src="main.js"></script>
   <link rel="stylesheet" type="text/css" href="main.css"></link>
 </head>
@@ -22,9 +23,10 @@
 </div>
 
 <div id="toolbar">
-  <img class="tool active" data-tool="grab"   src="img/hand.svg">
-  <img class="tool"        data-tool="pencil" src="img/pencil.svg">
-  <img class="tool"        data-tool="eraser" src="img/reverse-pencil.svg">
+  <img title="grab" class="tool active" data-tool="grab"   src="img/hand.svg" draggable="false">
+  <img title="pencil" class="tool"        data-tool="pencil" src="img/pencil.svg" draggable="false">
+  <img title="inkpen" class="tool"        data-tool="inkpen" src="img/fountain-pen.svg" draggable="false">
+  <img title="eraser" class="tool"        data-tool="eraser" src="img/stone-block.svg" draggable="false">
 </div>
 
 </body>

@@ -2,7 +2,8 @@ var Paint = {
   state: null,
   path:  [],
   color: "black",
-  size: 3
+  size: 1,
+  erase: false
 };
 
 var pencilTool = {
@@ -19,6 +20,14 @@ var eraserTool = {
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
   select:    eraserSelected
+};
+
+var inkpenTool = {
+  name:      "inkpen",
+  mouseDown: paintMouseDown,
+  mouseMove: paintMouseMove,
+  mouseUp:   paintMouseUp,
+  select:    inkpenSelected
 };
 
 function eachCanvas(f){
@@ -60,23 +69,28 @@ function repaintPathOn(canvas,ctx){
   var brushPath = Paint.path;
 
   if(brushPath.length == 0) return;
-  if(Paint.color){
-    ctx.strokeStyle = Paint.color;
-  }
-  else{
-    ctx.strokeStyle = canvas.getAttribute("data-color");
-  }
+  ctx.strokeStyle = Paint.color;
   ctx.lineWidth = Paint.size;
   ctx.lineCap = "round";
+  if(Paint.erase) ctx.globalCompositeOperation = "destination-out";
+  else            ctx.globalCompositeOperation = "source-over";
+  
 
   var start = standardPositionToCanvas(canvas, brushPath[0]);
   ctx.beginPath();
-  ctx.moveTo(start.x, start.y);
-  for(let i=1; i < brushPath.length; i++){
-    var next = standardPositionToCanvas(canvas, brushPath[i]);
-    ctx.lineTo(next.x, next.y);
+  if(brushPath.length > 1){
+    ctx.moveTo(start.x + 0.5, start.y + 0.5);
+    for(let i=1; i < brushPath.length; i++){
+      var next = standardPositionToCanvas(canvas, brushPath[i]);
+      ctx.lineTo(next.x + 0.5, next.y + 0.5);
+    }
+    ctx.stroke();
   }
-  ctx.stroke();
+  else{
+    ctx.arc(start.x + 0.5, start.y + 0.5, Paint.size/2.0, 0, 2*Math.PI);
+    ctx.fill();
+  }
+
 }
 
 function repaintPathOnAll(klass){
@@ -100,31 +114,53 @@ function paintMouseDown(ev){
   Paint.state = 1;
   Paint.path.length = 0;
   Paint.path.push(eventPositionToStandard(ev));
-  repaintPathOnAll("scratch");
+  if(Paint.erase){
+    repaintPathOnAll("glass");
+  }
+  else{
+    repaintPathOnAll("scratch");
+  }
 }
 
 function paintMouseMove(ev){
   if(Paint.state == null) return;
   Paint.path.push(eventPositionToStandard(ev));
-  clearAllScratch();
-  repaintPathOnAll("scratch");
+  if(Paint.erase){
+    repaintPathOnAll("glass");
+  }
+  else{
+    clearAllScratch();
+    repaintPathOnAll("scratch");
+  }
 }
 
 function paintMouseUp(ev){
   if(ev.button != 0) return;
   if(Paint.state == null) return;
-  repaintPathOnAll("paper");
-  clearAllScratch();
+  if(Paint.erase){
+  }
+  else{
+    repaintPathOnAll("glass");
+    clearAllScratch();
+  }
   Paint.path.length = 0;
   Paint.state = null;
 }
 
 function paintSelected(){
-  Paint.color = "black";
-  Paint.size = 3;
+  Paint.color = "gray";
+  Paint.size = 1;
+  Paint.erase = false;
 }
 
 function eraserSelected(){
   Paint.color = null;
   Paint.size = 30;
+  Paint.erase = true;
+}
+
+function inkpenSelected(){
+  Paint.color = "black";
+  Paint.size = 2;
+  Paint.erase = false;
 }

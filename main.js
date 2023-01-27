@@ -1,42 +1,16 @@
 var db;
 var currentTool;
 
-
-/*
-function drawGrid(canvas,ctx){
-  var N = 33;
-  var sep = 1024 / N;
-  ctx.strokeStyle = "lightgray";
-  for(let i=0; i < N; i++){
-    var x = Math.floor(i * sep)+0.5;
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, 1024);
-    ctx.stroke();
-  }
-  for(let j=0; j < N; j++){
-    var y = Math.floor(j * sep)+0.5;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(1024, y);
-    ctx.stroke();
-  }
-}
-
-function mark(canvas,ctx,x,y){
-  var rect = canvas.getBoundingClientRect();
-  var rx = rect.left;
-  var ry = rect.top;
-  ctx.strokeStyle = "black";
-  ctx.beginPath();
-  ctx.arc(x-rx, y-ry, 50, 0, 2*Math.PI);
-  ctx.stroke();
-}
-*/
-
-
 function onMouseDown(ev){
-  currentTool.mouseDown(ev);
+  if(ev.target.classList.contains("token")){
+    currentTool = grabTool;
+    currentTool.select();
+    currentTool.mouseDown(ev);
+    toolButtonChangeTo(document.querySelector('#toolbar img[data-tool="grab"]'));
+  }
+  else{
+    currentTool.mouseDown(ev);
+  }
 }
 
 function onMouseMove(ev){
@@ -47,18 +21,23 @@ function onMouseUp(ev){
   currentTool.mouseUp(ev);
 }
 
+function toolButtonChangeTo(button){
+  var buttons = document.querySelectorAll("#toolbar .tool");
+  for(let i=0; i<buttons.length; i++){
+    buttons[i].classList.remove("active");
+  }
+  button.classList.add("active");
+}
+
 function onToolClick(ev){
   if(ev.target.matches("#toolbar .tool")){
     var name = ev.target.getAttribute("data-tool");
     if(currentTool.name != name){
-      var buttons = document.querySelectorAll("#toolbar .tool");
-      for(let i=0; i<buttons.length; i++){
-        buttons[i].classList.remove("active");
-      }
-      ev.target.classList.add("active");
+      toolButtonChangeTo(ev.target);
       switch(name){
-        case "grab":  currentTool = grabTool;  break;
+        case "grab":   currentTool = grabTool;  break;
         case "pencil": currentTool = pencilTool; break;
+        case "inkpen": currentTool = inkpenTool; break;
         case "eraser": currentTool = eraserTool; break;
       }
       currentTool.select();
@@ -98,7 +77,24 @@ function onLoad(ev){
     top: 0,
     zIndex: 0,
     color: "beige",
+    clear: false,
     class: "paper"
+  });
+  document.getElementById("workspace").appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  drawSquareGrid(canvas,ctx,{
+    N: 16,
+    color: "#e5e5cC"
+  });
+
+  var canvas = newSheet({
+    width: size,
+    height: size,
+    left: 0,
+    top: 0,
+    zIndex: 50,
+    clear: true,
+    class: "glass"
   });
   document.getElementById("workspace").appendChild(canvas);
 
@@ -108,12 +104,13 @@ function onLoad(ev){
     left: 0,
     top: 0,
     zIndex: 50,
-    color: "beige",
     clear: true,
     class: "scratch"
   });
   document.getElementById("workspace").appendChild(canvas);
 
+
+/*
   var canvas = newSheet({
     newID: true,
     width: size,
@@ -137,6 +134,7 @@ function onLoad(ev){
     class: "scratch"
   });
   document.getElementById("workspace").appendChild(canvas);
+*/
 
   /*
   var openReq = window.indexedDB.open("example");

@@ -20,11 +20,14 @@ var Grab = {
 function grabMouseDown(ev){
   if(ev.button != 0) return;
   if(ev.target.classList.contains("token")){
-    console.log("grab token");
+    var token = ev.target;
+    var container = ev.target.parentElement;
+    container.removeChild(token);
+    container.appendChild(token);
     Grab.state = "token";
-    Grab.token = ev.target;
-    var rect1 = ev.target.getBoundingClientRect();
-    var rect2 = ev.target.parentElement.getBoundingClientRect();
+    Grab.token = token;
+    var rect1 = token.getBoundingClientRect();
+    var rect2 = container.getBoundingClientRect();
     Grab.tokenOrig = {
       x: rect2.x,
       y: rect2.y
@@ -46,7 +49,6 @@ function grabMouseMove(ev){
     case null:
       break;
     case "token":
-      console.log("move token");
       var elem = Grab.token;
       elem.style.left = ev.clientX - Grab.tokenOrig.x + Grab.tokenOffset.x + "px";
       elem.style.top  = ev.clientY - Grab.tokenOrig.y + Grab.tokenOffset.y + "px";
