@@ -3,7 +3,10 @@ var Paint = {
   path:  [],
   color: "black",
   size: 1,
-  erase: false
+  erase: false,
+  snap: false,
+  shading: false,
+  thickness: 7
 };
 
 var pencilTool = {
@@ -35,6 +38,7 @@ var paintTool = {
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
+  click:     function(ev){},
   select:    paintSelected
 };
 
@@ -72,6 +76,13 @@ function standardPositionToCanvas(canvas, xy){
   return {x: x, y: y};
 }
 
+function snapPointToGrid(xy){
+  return {
+    x: Math.floor((xy.x+16) / 32) * 32,
+    y: Math.floor((xy.y+16) / 32) * 32
+  }
+}
+
 /* PAINTING COMMANDS */
 function repaintPathOn(canvas,ctx){
   var brushPath = Paint.path;
@@ -82,7 +93,6 @@ function repaintPathOn(canvas,ctx){
   ctx.lineCap = "round";
   if(Paint.erase) ctx.globalCompositeOperation = "destination-out";
   else            ctx.globalCompositeOperation = "source-over";
-  
 
   var start = standardPositionToCanvas(canvas, brushPath[0]);
   ctx.beginPath();
@@ -95,6 +105,7 @@ function repaintPathOn(canvas,ctx){
     ctx.stroke();
   }
   else{
+    ctx.fillStyle = "black";
     ctx.arc(start.x + 0.5, start.y + 0.5, Paint.size/2.0, 0, 2*Math.PI);
     ctx.fill();
   }
@@ -121,7 +132,8 @@ function paintMouseDown(ev){
   if(!ev.target.classList.contains("surface")) return;
   Paint.state = 1;
   Paint.path.length = 0;
-  Paint.path.push(eventPositionToStandard(ev));
+  if(Paint.snap && !Paint.erase) Paint.path.push(snapPointToGrid(eventPositionToStandard(ev)));
+  else Paint.path.push(eventPositionToStandard(ev));
   if(Paint.erase){
     repaintPathOnAll("glass");
   }
@@ -132,7 +144,8 @@ function paintMouseDown(ev){
 
 function paintMouseMove(ev){
   if(Paint.state == null) return;
-  Paint.path.push(eventPositionToStandard(ev));
+  if(Paint.snap && !Paint.erase) Paint.path.push(snapPointToGrid(eventPositionToStandard(ev)));
+  else Paint.path.push(eventPositionToStandard(ev));
   if(Paint.erase){
     repaintPathOnAll("glass");
   }
@@ -159,22 +172,39 @@ function pencilSelected(){
   Paint.color = "#585858";
   Paint.size = 1;
   Paint.erase = false;
+  Paint.shading = false;
 }
 
 function eraserSelected(){
   Paint.color = null;
   Paint.size = 30;
   Paint.erase = true;
+  Paint.shading = false;
 }
 
 function inkpenSelected(){
   Paint.color = "black";
-  Paint.size = 2;
+  Paint.size = 7;
   Paint.erase = false;
+  Paint.shading = false;
 }
 
 function paintSelected(){
   Paint.color = "green";
   Paint.size = 20;
   Paint.erase = false;
+  Paint.shading = true;
 }
+
+
+
+
+/* simplify a sequence of points because they came from the terrible mouse */
+
+function simplify(points){
+  var out = [];
+  var group = [];
+  for(i=0; i<points.length; i++){
+  }
+}
+

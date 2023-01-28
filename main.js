@@ -21,6 +21,10 @@ function onMouseUp(ev){
   currentTool.mouseUp(ev);
 }
 
+function onClick(ev){
+  currentTool.click(ev);
+}
+
 function onDoubleClick(ev){
   if(ev.target.classList.contains("token")){
     if(ev.target.classList.contains("reverse")){
@@ -72,6 +76,7 @@ function onLoad(ev){
 
   currentTool = grabTool;
 
+  document.addEventListener("click", onClick);
   document.addEventListener("mousedown", onMouseDown);
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("mouseup",   onMouseUp);
@@ -96,8 +101,12 @@ function onLoad(ev){
   document.getElementById("workspace").appendChild(canvas);
   var ctx = canvas.getContext('2d');
   drawSquareGrid(canvas,ctx,{
-    N: 16,
+    N: 32,
     color: "#e5e5cC"
+  });
+  drawSquareGrid(canvas,ctx,{
+    N: 16,
+    color: "#d5d5bC"
   });
 
   var canvas = newSheet({
@@ -121,6 +130,7 @@ function onLoad(ev){
     class: "scratch"
   });
   document.getElementById("workspace").appendChild(canvas);
+
 
 
 /*

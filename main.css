@@ -43,6 +43,11 @@ body {
   transform: scaleX(-1);
 }
 
+.token.jumbo {
+  width: 64px;
+  height: 64px;
+}
+
 .pin {
   width: 32px;
   z-index: 100;
@@ -85,3 +90,4 @@ canvas {
   padding: 20px;
   margin: 0px;
 }
+

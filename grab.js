@@ -3,6 +3,7 @@ var grabTool = {
   mouseDown: grabMouseDown,
   mouseMove: grabMouseMove,
   mouseUp:   grabMouseUp,
+  click:     function(ev){},
   select:    function(){}
 };
 
