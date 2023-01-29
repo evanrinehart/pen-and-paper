@@ -1,6 +1,64 @@
 var db;
 var currentTool;
 
+var Options = {
+  snap: false
+};
+
+function snapPoint(p){
+  return !Options.snap ? p : {
+      x: Math.floor(p.x / 16) * 16,
+      y: Math.floor(p.y / 16) * 16
+    };
+}
+
+function eachCanvas(f){
+  var stuff = document.getElementsByTagName("canvas");
+  for(let i = 0; i < stuff.length; i++){
+    var canvas = stuff[i];
+    var ctx = canvas.getContext("2d");
+    f(canvas, ctx);
+  }
+}
+
+function eachCanvasClass(klass, f){
+  eachCanvas(function(canvas,ctx){
+    if(!canvas.classList.contains(klass)) return;
+    f(canvas,ctx);
+  });
+}
+
+function clearAllScratch(){
+  eachCanvasClass("scratch", function(canvas, ctx){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  });
+}
+
+function eventPositionToStandard(ev){
+  var ws = document.getElementById("workspace");
+  var rect = ws.getBoundingClientRect();
+  var x = ev.clientX - rect.x;
+  var y = ev.clientY - rect.y;
+  return {x: x, y: y};
+}
+
+function standardPositionToClient(xy){
+  var ws = document.getElementById("workspace");
+  var rect = ws.getBoundingClientRect();
+  var x = xy.x + rect.x;
+  var y = xy.y + rect.y;
+  return {x: x, y: y};
+}
+
+function standardPositionToCanvas(canvas, xy){
+  var rect = canvas.getBoundingClientRect();
+  var clientXY = standardPositionToClient(xy);
+  var x = clientXY.x - rect.x;
+  var y = clientXY.y - rect.y;
+  return {x: x, y: y};
+}
+
+
 function onMouseDown(ev){
   if(ev.target.classList.contains("token")){
     currentTool = grabTool;
@@ -23,6 +81,10 @@ function onMouseUp(ev){
 
 function onClick(ev){
   currentTool.click(ev);
+}
+
+function onKeyDown(ev){
+  currentTool.keyDown(ev);
 }
 
 function onDoubleClick(ev){
@@ -74,12 +136,13 @@ function onHeadingClick(ev){
 
 function onLoad(ev){
 
-  currentTool = grabTool;
+  currentTool = brush1Tool;
 
   document.addEventListener("click", onClick);
   document.addEventListener("mousedown", onMouseDown);
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("mouseup",   onMouseUp);
+  document.addEventListener("keydown",   onKeyDown);
 
   document.addEventListener("click", onToolClick);
   document.addEventListener("click", onHeadingClick);
