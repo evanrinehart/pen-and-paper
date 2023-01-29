@@ -121,6 +121,8 @@ function repaintPathOn(canvas,ctx){
     ctx.fill();
   }
 
+  ctx.globalCompositeOperation = "source-over";
+
 }
 
 function repaintPathOnAll(klass){
