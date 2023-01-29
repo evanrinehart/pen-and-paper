@@ -20,6 +20,7 @@ var pencilTool = {
   select:    pencilSelected
 };
 
+/*
 var eraserTool = {
   name:      "eraser",
   mouseDown: paintMouseDown,
@@ -30,6 +31,7 @@ var eraserTool = {
   unselect:  function(){},
   select:    eraserSelected
 };
+*/
 
 var inkpenTool = {
   name:      "inkpen",
@@ -210,14 +212,4 @@ function paintSelected(){
 }
 
 
-
-
-/* simplify a sequence of points because they came from the terrible mouse */
-
-function simplify(points){
-  var out = [];
-  var group = [];
-  for(i=0; i<points.length; i++){
-  }
-}
 
