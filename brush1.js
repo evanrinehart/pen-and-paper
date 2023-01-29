@@ -10,6 +10,7 @@ var Brush1 = {
 var brush1Tool = {
   name: "brush1",
   click: function(ev){
+    if(!ev.target.classList.contains("surface")) return;
     //draw shape if previous point exists
     var freeP = eventPositionToStandard(ev);
     var p = snapPoint(freeP);
@@ -29,13 +30,23 @@ var brush1Tool = {
     //  13 = enter
     //  27 = escape
     //   9 = tab
-    eachCanvasClass("glass", brush1Commit);
-    clearAllScratch();
-    Brush1.points.length = 0;
+    switch(ev.keyCode){
+      case 13:
+      case 27:
+      case 32:
+      case  9:
+        eachCanvasClass("glass", brush1Commit);
+        clearAllScratch();
+        Brush1.points.length = 0;
+    }
   },
   mouseUp: function(ev){},
   mouseDown: function(ev){},
   select: function(){
+    //eachCanvas(function(canvas, ctx){
+    //  ctx.globalCompositeOperation = "source-over";
+    //});
+    Brush1.points.length = 0;
   },
   unselect: function(){
     Brush1.points.length = 0;
@@ -46,6 +57,7 @@ var brush1Tool = {
 function brush1RefreshIndicator(canvas, ctx){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.beginPath();
+  ctx.globalCompositeOperation = "source-over";
 
   if(Brush1.points.length < 1){
     var c = Brush1.cursor;
@@ -60,6 +72,8 @@ function brush1RefreshIndicator(canvas, ctx){
     ctx.strokeStyle = Brush1.color;
     ctx.lineWidth = Brush1.thickness;
     ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    //ctx.miterLimit = 2;
     ctx.moveTo(start.x, start.y);
     for(let i=1; i<points.length; i++){
       var q = points[i];
@@ -77,9 +91,12 @@ function brush1Commit(canvas, ctx){
   var points = Brush1.points;
   var start = points[0];
   ctx.beginPath();
+  ctx.globalCompositeOperation = "source-over";
   ctx.strokeStyle = Brush1.color;
   ctx.lineWidth = Brush1.thickness;
   ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  //ctx.miterLimit = 2;
   ctx.moveTo(start.x, start.y);
   for(let i=1; i<points.length; i++){
     var q = points[i];

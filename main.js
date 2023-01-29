@@ -84,6 +84,8 @@ function onClick(ev){
 }
 
 function onKeyDown(ev){
+  if(ev.code == "KeyS") Options.snap = !Options.snap;
+  console.log(ev);
   currentTool.keyDown(ev);
 }
 
@@ -111,9 +113,10 @@ function onToolClick(ev){
     var name = ev.target.getAttribute("data-tool");
     if(currentTool.name != name){
       toolButtonChangeTo(ev.target);
+      currentTool.unselect();
       switch(name){
         case "grab":   currentTool = grabTool;  break;
-        case "pencil": currentTool = pencilTool; break;
+        case "brush1": currentTool = brush1Tool; break;
         case "inkpen": currentTool = inkpenTool; break;
         case "paint":  currentTool = paintTool; break;
         case "eraser": currentTool = eraserTool; break;
@@ -136,7 +139,7 @@ function onHeadingClick(ev){
 
 function onLoad(ev){
 
-  currentTool = brush1Tool;
+  currentTool = grabTool;
 
   document.addEventListener("click", onClick);
   document.addEventListener("mousedown", onMouseDown);
@@ -177,7 +180,7 @@ function onLoad(ev){
     height: size,
     left: 0,
     top: 0,
-    zIndex: 50,
+    zIndex: 10,
     clear: true,
     class: "glass"
   });
@@ -195,6 +198,50 @@ function onLoad(ev){
   document.getElementById("workspace").appendChild(canvas);
 
 
+  /* SAME THING BUT 1024 over there */
+  var canvas = newSheet({
+    newID: true,
+    width: size,
+    height: size,
+    left: 1024,
+    top: 0,
+    zIndex: 0,
+    color: "beige",
+    clear: false,
+    class: "paper"
+  });
+  document.getElementById("workspace").appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  drawSquareGrid(canvas,ctx,{
+    N: 32,
+    color: "#e5e5cC"
+  });
+  drawSquareGrid(canvas,ctx,{
+    N: 16,
+    color: "#d5d5bC"
+  });
+
+  var canvas = newSheet({
+    width: size,
+    height: size,
+    left: 1024,
+    top: 0,
+    zIndex: 10,
+    clear: true,
+    class: "glass"
+  });
+  document.getElementById("workspace").appendChild(canvas);
+
+  var canvas = newSheet({
+    width: size,
+    height: size,
+    left: 1024,
+    top: 0,
+    zIndex: 50,
+    clear: true,
+    class: "scratch"
+  });
+  document.getElementById("workspace").appendChild(canvas);
 
 /*
   var canvas = newSheet({

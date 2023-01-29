@@ -14,6 +14,9 @@ var pencilTool = {
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
+  keyDown:   function(ev){},
+  click:     function(ev){},
+  unselect:  function(){},
   select:    pencilSelected
 };
 
@@ -22,6 +25,9 @@ var eraserTool = {
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
+  keyDown:   function(ev){},
+  click:     function(ev){},
+  unselect:  function(){},
   select:    eraserSelected
 };
 
@@ -30,6 +36,9 @@ var inkpenTool = {
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
+  keyDown:   function(ev){},
+  click:     function(ev){},
+  unselect:  function(){},
   select:    inkpenSelected
 };
 
@@ -38,7 +47,9 @@ var paintTool = {
   mouseDown: paintMouseDown,
   mouseMove: paintMouseMove,
   mouseUp:   paintMouseUp,
+  keyDown:   function(ev){},
   click:     function(ev){},
+  unselect:  function(){},
   select:    paintSelected
 };
 
