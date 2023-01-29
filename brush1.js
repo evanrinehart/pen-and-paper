@@ -9,7 +9,8 @@ var Brush1 = {
 
 var brush1Tool = {
   name: "brush1",
-  click: function(ev){
+  mouseDown: function(ev){
+    if(ev.button != 0) return;
     if(!ev.target.classList.contains("surface")) return;
     //draw shape if previous point exists
     var freeP = eventPositionToStandard(ev); /* ! */
@@ -19,6 +20,10 @@ var brush1Tool = {
     console.log(Brush1);
     clearAllScratch();
     brush1RefreshIndicator();
+  },
+  mouseUp: function(ev){
+  },
+  click: function(ev){
   },
   mouseMove: function(ev){
     var freeP = eventPositionToStandard(ev); /* ! */
@@ -43,8 +48,6 @@ var brush1Tool = {
         Brush1.points.length = 0;
     }
   },
-  mouseUp: function(ev){},
-  mouseDown: function(ev){},
   select: function(){
     //eachCanvas(function(canvas, ctx){
     //  ctx.globalCompositeOperation = "source-over";
