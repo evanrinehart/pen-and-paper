@@ -18,7 +18,8 @@ var Grab = {
   worldMarginX: 0,
   worldMarginY: 0,
   worldPrevX: null,
-  worldPrevY: null
+  worldPrevY: null,
+  panEngaged: false
 }
 
 function grabMouseDown(ev){
@@ -43,8 +44,7 @@ function grabMouseDown(ev){
   }
   else if(ev.target.classList.contains("world")){
     Grab.state = "world";
-    Grab.worldPrevX = ev.clientX;
-    Grab.worldPrevY = ev.clientY;
+    grabWorldStart(ev);
   }
 }
 
@@ -58,15 +58,7 @@ function grabMouseMove(ev){
       elem.style.top  = ev.clientY - Grab.tokenOrig.y + Grab.tokenOffset.y + "px";
       break;
     case "world":
-      var deltaX = ev.clientX - Grab.worldPrevX;
-      var deltaY = ev.clientY - Grab.worldPrevY;
-      Grab.worldMarginX += deltaX;
-      Grab.worldMarginY += deltaY;
-      var workspace = document.getElementById("workspace");
-      workspace.style.marginLeft = Grab.worldMarginX + "px";
-      workspace.style.marginTop  = Grab.worldMarginY + "px";
-      Grab.worldPrevX = ev.clientX;
-      Grab.worldPrevY = ev.clientY;
+      grabWorldMove(ev);
       break;
   }
 }
@@ -76,4 +68,30 @@ function grabMouseUp(ev){
   if(Grab.state == null) return;
   Grab.state = null;
   Grab.token = null;
+  grabWorldEnd(ev);
 }
+
+/* grab and drag the whole world */
+/* can be done with grab tool or middle mouse any time */
+function grabWorldStart(ev){
+  Grab.panEngaged = true;
+  Grab.worldPrevX = ev.clientX;
+  Grab.worldPrevY = ev.clientY;
+}
+
+function grabWorldMove(ev){
+  var deltaX = ev.clientX - Grab.worldPrevX;
+  var deltaY = ev.clientY - Grab.worldPrevY;
+  Grab.worldMarginX += deltaX;
+  Grab.worldMarginY += deltaY;
+  var workspace = document.getElementById("workspace");
+  workspace.style.marginLeft = Grab.worldMarginX + "px";
+  workspace.style.marginTop  = Grab.worldMarginY + "px";
+  Grab.worldPrevX = ev.clientX;
+  Grab.worldPrevY = ev.clientY;
+}
+
+function grabWorldEnd(ev){
+  Grab.panEngaged = false;
+}
+

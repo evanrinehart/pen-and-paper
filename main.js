@@ -95,6 +95,10 @@ function onMouseDown(ev){
     currentTool.mouseDown(ev);
     toolButtonChangeTo(document.querySelector('#toolbar img[data-tool="grab"]'));
   }
+  /* holding middle mouse allows panning the workspace any time */
+  else if(ev.button == 1){
+    grabWorldStart(ev);
+  }
   /* assume the click is against the general workspace */
   else{
     currentTool.mouseDown(ev);
@@ -102,11 +106,23 @@ function onMouseDown(ev){
 }
 
 function onMouseMove(ev){
-  currentTool.mouseMove(ev);
+  /* dragging the whole world may happen any time */
+  if(Grab.panEngaged){
+    grabWorldMove(ev);
+  }
+  else{
+    currentTool.mouseMove(ev);
+  }
 }
 
 function onMouseUp(ev){
-  currentTool.mouseUp(ev);
+  /* holding middle mouse allows panning the workspace any time */
+  if(ev.button == 1){
+    grabWorldEnd();
+  }
+  else{
+    currentTool.mouseUp(ev);
+  }
 }
 
 function onClick(ev){
@@ -167,10 +183,12 @@ function onLoad(ev){
   });
   document.getElementById("workspace").appendChild(canvas);
   var ctx = canvas.getContext('2d');
+  /*
   drawSquareGrid(canvas,ctx,{
     N: 32,
     color: "#e5e5cC"
   });
+  */
   drawSquareGrid(canvas,ctx,{
     N: 16,
     color: "#d5d5bC"
@@ -213,10 +231,12 @@ function onLoad(ev){
   });
   document.getElementById("workspace").appendChild(canvas);
   var ctx = canvas.getContext('2d');
+  /*
   drawSquareGrid(canvas,ctx,{
     N: 32,
     color: "#e5e5cC"
   });
+  */
   drawSquareGrid(canvas,ctx,{
     N: 16,
     color: "#d5d5bC"
