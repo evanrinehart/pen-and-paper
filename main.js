@@ -60,7 +60,34 @@ function standardPositionToCanvas(canvas, xy){
 
 
 function onMouseDown(ev){
-  if(currentTool.name != "grab" && ev.target.classList.contains("token") && !currentTool.busy()){
+  /* clicking tool switching buttons */
+  if(ev.button == 0 && !currentTool.busy() && ev.target.matches("#toolbar .tool")){
+    var name = ev.target.getAttribute("data-tool");
+    if(currentTool.name != name){
+      toolButtonChangeTo(ev.target);
+      currentTool.unselect();
+      switch(name){
+        case "grab":   currentTool = grabTool;  break;
+        case "brush1": currentTool = brush1Tool; break;
+        case "inkpen": currentTool = inkpenTool; break;
+        case "paint":  currentTool = paintTool; break;
+        case "eraser": currentTool = eraserTool; break;
+      }
+      currentTool.select();
+    }
+  }
+  /* clicking the heading to edit the message */
+  else if(ev.button == 0 && !currentTool.busy() && ev.target.id == "header"){
+    var newText = prompt("Change the heading text?", ev.target.innerHTML);
+    if(newText){
+      ev.target.innerHTML = newText;
+    }
+  }
+  /* clicking a token regardless of current tool to switch to grab mode */
+  else if( ev.button == 0 && 
+           !currentTool.busy() &&
+           currentTool.name != "grab" && 
+           ev.target.classList.contains("token") ){
     /* This just won't work in general probably. */
     currentTool.unselect();
     currentTool = grabTool;
@@ -68,6 +95,7 @@ function onMouseDown(ev){
     currentTool.mouseDown(ev);
     toolButtonChangeTo(document.querySelector('#toolbar img[data-tool="grab"]'));
   }
+  /* assume the click is against the general workspace */
   else{
     currentTool.mouseDown(ev);
   }
@@ -110,33 +138,6 @@ function toolButtonChangeTo(button){
   button.classList.add("active");
 }
 
-function onToolClick(ev){
-  if(ev.target.matches("#toolbar .tool")){
-    var name = ev.target.getAttribute("data-tool");
-    if(currentTool.name != name){
-      toolButtonChangeTo(ev.target);
-      currentTool.unselect();
-      switch(name){
-        case "grab":   currentTool = grabTool;  break;
-        case "brush1": currentTool = brush1Tool; break;
-        case "inkpen": currentTool = inkpenTool; break;
-        case "paint":  currentTool = paintTool; break;
-        case "eraser": currentTool = eraserTool; break;
-      }
-      currentTool.select();
-    }
-  }
-}
-
-function onHeadingClick(ev){
-  if(ev.button == 0 && ev.target.id == "header"){
-    var newText = prompt("Change the heading text?", ev.target.innerHTML);
-    if(newText){
-      ev.target.innerHTML = newText;
-    }
-  }
-}
-
 
 
 function onLoad(ev){
@@ -149,8 +150,6 @@ function onLoad(ev){
   document.addEventListener("mouseup",   onMouseUp);
   document.addEventListener("keydown",   onKeyDown);
 
-  document.addEventListener("click", onToolClick);
-  document.addEventListener("click", onHeadingClick);
   document.addEventListener("dblclick", onDoubleClick);
 
   var size = 1024;

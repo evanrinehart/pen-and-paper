@@ -10,6 +10,10 @@ var Brush1 = {
 var brush1Tool = {
   name: "brush1",
   mouseDown: function(ev){
+    if(ev.button == 2){
+      brush1CommitExit();
+      return;
+    }
     if(ev.button != 0) return;
     //if(!ev.target.classList.contains("surface")) return;
     //draw shape if previous point exists

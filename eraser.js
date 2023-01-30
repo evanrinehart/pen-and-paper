@@ -14,7 +14,7 @@ var eraserTool = {
   name:      "eraser",
   mouseDown: function(ev){
     if(ev.button != 0) return;
-    if(!ev.target.classList.contains("surface")) return;
+    //if(!ev.target.classList.contains("surface")) return;
     Eraser.state = "engaged";
     Eraser.points.length = 0;
     var p = snapPoint(eventPositionToStandard(ev));
