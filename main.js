@@ -60,7 +60,9 @@ function standardPositionToCanvas(canvas, xy){
 
 
 function onMouseDown(ev){
-  if(ev.target.classList.contains("token")){
+  if(currentTool.name != "grab" && ev.target.classList.contains("token") && !currentTool.busy()){
+    /* This just won't work in general probably. */
+    currentTool.unselect();
     currentTool = grabTool;
     currentTool.select();
     currentTool.mouseDown(ev);

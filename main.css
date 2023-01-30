@@ -15,6 +15,7 @@ body {
   padding 0px;
   margin: 0px;
   padding-bottom: 0px;
+  line-height: 0.8em;
 }
 
 #workspace {
@@ -46,6 +47,10 @@ body {
 .token.jumbo {
   width: 64px;
   height: 64px;
+}
+
+.token.selected {
+  outline: 2px solid magenta;
 }
 
 .pin {

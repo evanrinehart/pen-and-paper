@@ -48,7 +48,8 @@ var eraserTool = {
     Eraser.state = "standby";
     Eraser.points.length = 0;
   },
-  select:    function(){}
+  select:    function(){},
+  busy: function(){ return Eraser.state != "standby"; }
 };
 
 function eraserStroke(canvas, ctx, points, erase){

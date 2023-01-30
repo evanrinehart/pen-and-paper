@@ -11,7 +11,7 @@ var brush1Tool = {
   name: "brush1",
   mouseDown: function(ev){
     if(ev.button != 0) return;
-    if(!ev.target.classList.contains("surface")) return;
+    //if(!ev.target.classList.contains("surface")) return;
     //draw shape if previous point exists
     var freeP = eventPositionToStandard(ev); /* ! */
     var p = snapPoint(freeP);
@@ -43,9 +43,7 @@ var brush1Tool = {
       case 27:
       case 32:
       case  9:
-        clearAllScratch();
-        brush1Commit();
-        Brush1.points.length = 0;
+        brush1CommitExit();
     }
   },
   select: function(){
@@ -55,11 +53,18 @@ var brush1Tool = {
     Brush1.points.length = 0;
   },
   unselect: function(){
-    Brush1.points.length = 0;
-    clearAllScratch();
+    brush1CommitExit();
+  },
+  busy: function(){
+    return Brush1.points.length > 0;
   }
 }
 
+function brush1CommitExit(){
+  clearAllScratch();
+  brush1Commit();
+  Brush1.points.length = 0;
+}
 
 function brush1Render(canvas, ctx, points, cursor){
   var plan = [];

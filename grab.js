@@ -6,7 +6,8 @@ var grabTool = {
   keyDown:   function(ev){},
   click:     function(ev){},
   unselect:  function(){},
-  select:    function(){}
+  select:    function(){},
+  busy:      function(){ return false; }
 };
 
 var Grab = {
